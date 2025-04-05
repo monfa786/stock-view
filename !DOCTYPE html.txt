@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>In-Stock Products</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tabletop.js/1.5.1/tabletop.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    .product {
+      display: inline-block;
+      width: 200px;
+      margin: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .product-name {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Available Products in Stock</h2>
+  <div id="product-list"></div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      Tabletop.init({
+        key: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRXAQhIW-6tRuf6N-bpZLEvEGUB2-o8XyzWMfL8GQbhRsPjG3HOZHjvlHkO9oze-lNYJ0R_lYvz23kU/pub?output=csv',
+        callback: showProducts,
+        simpleSheet: true
+      });
+    });
+
+    function showProducts(data) {
+      const container = document.getElementById('product-list');
+      data.forEach(product => {
+        const stock = parseInt(product["Stock Quantity"]);
+        if (stock > 0) {
+          const div = document.createElement('div');
+          div.className = 'product';
+          div.innerHTML = `
+            <img src="${product["Image URL"]}" alt="${product["Product Name"]}" />
+            <div class="product-name">${product["Product Name"]}</div>
+          `;
+          container.appendChild(div);
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
